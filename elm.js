@@ -10319,11 +10319,109 @@ Elm.StartApp.Simple.make = function (_elm) {
    var Config = F3(function (a,b,c) {    return {model: a,view: b,update: c};});
    return _elm.StartApp.Simple.values = {_op: _op,Config: Config,start: start};
 };
+Elm.Types = Elm.Types || {};
+Elm.Types.make = function (_elm) {
+   "use strict";
+   _elm.Types = _elm.Types || {};
+   if (_elm.Types.values) return _elm.Types.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var NoOp = {ctor: "NoOp"};
+   var Undo = {ctor: "Undo"};
+   var Categorize = function (a) {    return {ctor: "Categorize",_0: a};};
+   var Model = F2(function (a,b) {    return {budget: a,cats: b};});
+   var Expense = F3(function (a,b,c) {    return {name: a,amount: b,cat: c};});
+   var Budget = F2(function (a,b) {    return {old: a,$new: b};});
+   return _elm.Types.values = {_op: _op,Budget: Budget,Expense: Expense,Model: Model,Categorize: Categorize,Undo: Undo,NoOp: NoOp};
+};
+Elm.Actions = Elm.Actions || {};
+Elm.Actions.make = function (_elm) {
+   "use strict";
+   _elm.Actions = _elm.Actions || {};
+   if (_elm.Actions.values) return _elm.Actions.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Types = Elm.Types.make(_elm);
+   var _op = {};
+   var undo = function (model) {
+      var _p0 = model;
+      var budget = _p0.budget;
+      var _p1 = budget;
+      var old = _p1.old;
+      var $new = _p1.$new;
+      var _p2 = old;
+      if (_p2.ctor === "[]") {
+            return model;
+         } else {
+            return _U.update(model,{budget: {$new: A2($List._op["::"],_p2._0,$new),old: _p2._1}});
+         }
+   };
+   var noOp = $Basics.identity;
+   var categorize = F2(function (cat,model) {
+      var _p3 = model;
+      var budget = _p3.budget;
+      var _p4 = budget;
+      var old = _p4.old;
+      var $new = _p4.$new;
+      var _p5 = $new;
+      if (_p5.ctor === "[]") {
+            return model;
+         } else {
+            var next_cat = _U.update(_p5._0,{cat: cat});
+            return _U.update(model,{budget: {$new: _p5._1,old: A2($List._op["::"],next_cat,old)}});
+         }
+   });
+   return _elm.Actions.values = {_op: _op,categorize: categorize,noOp: noOp,undo: undo};
+};
 Elm.QuickBudget = Elm.QuickBudget || {};
 Elm.QuickBudget.make = function (_elm) {
    "use strict";
    _elm.QuickBudget = _elm.QuickBudget || {};
    if (_elm.QuickBudget.values) return _elm.QuickBudget.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Actions = Elm.Actions.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Types = Elm.Types.make(_elm);
+   var _op = {};
+   var update = F2(function (action,model) {
+      var _p0 = A2($Debug.watch,"action",action);
+      var _p1 = A2($Debug.watch,"model",$Basics.toString(model));
+      var _p2 = action;
+      switch (_p2.ctor)
+      {case "NoOp": return $Actions.noOp(model);
+         case "Undo": return $Actions.undo(model);
+         default: return A2($Actions.categorize,_p2._0,model);}
+   });
+   var model = {cats: _U.list(["Home","Groceries","Gages Allowance"])
+               ,budget: {old: _U.list([])
+                        ,$new: _U.list([{name: "Walmart",amount: 120.0,cat: "none"}
+                                       ,{name: "Petco",amount: 8.0,cat: "none"}
+                                       ,{name: "Winco",amount: 180.0,cat: "none"}
+                                       ,{name: "Zurkers",amount: 8.0,cat: "none"}
+                                       ,{name: "Humble Bundle",amount: 1.0,cat: "none"}])}};
+   return _elm.QuickBudget.values = {_op: _op,model: model,update: update};
+};
+Elm.View = Elm.View || {};
+Elm.View.make = function (_elm) {
+   "use strict";
+   _elm.View = _elm.View || {};
+   if (_elm.View.values) return _elm.View.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -10333,44 +10431,12 @@ Elm.QuickBudget.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $Types = Elm.Types.make(_elm);
    var _op = {};
-   var update = F2(function (action,model) {
-      var _p0 = A2($Debug.watch,"action",action);
-      var _p1 = A2($Debug.watch,"model.",$Basics.toString(model));
-      var _p2 = action;
-      switch (_p2.ctor)
-      {case "NoOp": return model;
-         case "Undo": var _p3 = model;
-           var budget = _p3.budget;
-           var _p4 = budget;
-           var old = _p4.old;
-           var $new = _p4.$new;
-           var _p5 = old;
-           if (_p5.ctor === "[]") {
-                 return model;
-              } else {
-                 return _U.update(model,{budget: {$new: A2($List._op["::"],_p5._0,$new),old: _p5._1}});
-              }
-         default: var _p6 = model;
-           var budget = _p6.budget;
-           var _p7 = budget;
-           var old = _p7.old;
-           var $new = _p7.$new;
-           var _p8 = $new;
-           if (_p8.ctor === "[]") {
-                 return model;
-              } else {
-                 var next_cat = _U.update(_p8._0,{cat: _p2._0});
-                 return _U.update(model,{budget: {$new: _p8._1,old: A2($List._op["::"],next_cat,old)}});
-              }}
-   });
-   var NoOp = {ctor: "NoOp"};
-   var Undo = {ctor: "Undo"};
-   var Categorize = function (a) {    return {ctor: "Categorize",_0: a};};
-   var viewUndoButton = function (address) {    return A2($Html.button,_U.list([A2($Html$Events.onClick,address,Undo)]),_U.list([$Html.text("Undo")]));};
+   var viewUndoButton = function (address) {    return A2($Html.button,_U.list([A2($Html$Events.onClick,address,$Types.Undo)]),_U.list([$Html.text("Undo")]));};
    var viewCatButton = F2(function (address,b) {
-      return A2($Html.button,_U.list([A2($Html$Events.onClick,address,Categorize(b))]),_U.list([$Html.text(b)]));
+      return A2($Html.button,_U.list([A2($Html$Events.onClick,address,$Types.Categorize(b))]),_U.list([$Html.text(b)]));
    });
    var viewExpense = F2(function (sty,x) {
       return A2($Html.div,
@@ -10382,9 +10448,9 @@ Elm.QuickBudget.make = function (_elm) {
    var viewExpenseNew = viewExpense($Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "red"}])));
    var viewExpenseOld = viewExpense($Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "black"}])));
    var view = F2(function (address,model) {
-      var _p9 = model;
-      var budget = _p9.budget;
-      var cats = _p9.cats;
+      var _p0 = model;
+      var budget = _p0.budget;
+      var cats = _p0.cats;
       var viewButton = viewCatButton(address);
       return A2($Html.div,
       _U.list([]),
@@ -10397,32 +10463,7 @@ Elm.QuickBudget.make = function (_elm) {
       _U.list([]),
       _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text(name)])),$Html.text(A2($Basics._op["++"],"Total: ",$Basics.toString(total)))]));
    });
-   var model = {cats: _U.list(["Home","Groceries","Gages Allowance"])
-               ,budget: {old: _U.list([])
-                        ,$new: _U.list([{name: "Walmart",amount: 120.0,cat: "none"}
-                                       ,{name: "Petco",amount: 8.0,cat: "none"}
-                                       ,{name: "Winco",amount: 180.0,cat: "none"}
-                                       ,{name: "Zurkers",amount: 8.0,cat: "none"}
-                                       ,{name: "Humble Bundle",amount: 1.0,cat: "none"}])}};
-   var Model = F2(function (a,b) {    return {budget: a,cats: b};});
-   var Expense = F3(function (a,b,c) {    return {name: a,amount: b,cat: c};});
-   var Budget = F2(function (a,b) {    return {old: a,$new: b};});
-   return _elm.QuickBudget.values = {_op: _op
-                                    ,Budget: Budget
-                                    ,Expense: Expense
-                                    ,Model: Model
-                                    ,model: model
-                                    ,viewCategory: viewCategory
-                                    ,viewExpense: viewExpense
-                                    ,viewExpenseNew: viewExpenseNew
-                                    ,viewExpenseOld: viewExpenseOld
-                                    ,viewCatButton: viewCatButton
-                                    ,viewUndoButton: viewUndoButton
-                                    ,view: view
-                                    ,Categorize: Categorize
-                                    ,Undo: Undo
-                                    ,NoOp: NoOp
-                                    ,update: update};
+   return _elm.View.values = {_op: _op,view: view};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -10438,8 +10479,9 @@ Elm.Main.make = function (_elm) {
    $QuickBudget = Elm.QuickBudget.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $StartApp$Simple = Elm.StartApp.Simple.make(_elm);
+   $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
+   $View = Elm.View.make(_elm);
    var _op = {};
-   var main = $StartApp$Simple.start({model: $QuickBudget.model,update: $QuickBudget.update,view: $QuickBudget.view});
+   var main = $StartApp$Simple.start({model: $QuickBudget.model,update: $QuickBudget.update,view: $View.view});
    return _elm.Main.values = {_op: _op,main: main};
 };

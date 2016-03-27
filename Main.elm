@@ -1,6 +1,7 @@
-module Main where
---import Counter exposing (update, view)
-import QuickBudget exposing (model, update, view)
+module Main (..) where
+
+import QuickBudget exposing (model, update)
+import View exposing (view)
 import StartApp.Simple exposing (start)
 import Html exposing (Html)
 
@@ -8,7 +9,7 @@ import Html exposing (Html)
 main : Signal Html.Html
 main =
   start
-  { model = model
-  , update = update
-  , view = view
-  }
+    { model = model
+    , update = update
+    , view = view
+    }
