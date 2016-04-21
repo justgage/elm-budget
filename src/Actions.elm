@@ -13,9 +13,11 @@ categorize cat model =
       budget
   in
     case new of
+      -- there's no more to categorize
       [] ->
         model
 
+      -- there is more to categorize
       next :: rest ->
         let
           next_cat =

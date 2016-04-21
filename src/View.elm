@@ -4,6 +4,31 @@ import Html exposing (h3, div, button, text)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, style)
 import Types exposing (..)
+import Dict
+
+
+-- import List.Extra as ListEx
+
+
+groupReducer group x =
+  Dict.update
+    x.cat
+    (\entry ->
+      case entry of
+        Nothing ->
+          Just x.amount
+
+        Just subTotal ->
+          Just (x.amount + subTotal)
+    )
+
+
+
+-- colletCategories : List Expense -> Dict.Dict
+
+
+colletCategories expenses =
+  Dict.foldl groupReducer expenses {}
 
 
 viewCategory : String -> Float -> Html.Html
@@ -63,7 +88,13 @@ view address model =
         []
         [ div
             []
-            (List.map viewExpenseOld budget.old)
+            [ colletCategories budget.old
+                |> toString
+                |> text
+            ]
+        , div
+            []
+            (text <| toString viewExpenseOld budget.old)
         , div
             []
             (List.map viewExpenseNew budget.new |> List.reverse)
