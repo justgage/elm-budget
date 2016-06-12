@@ -1,15 +1,14 @@
-module Main (..) where
+module Main exposing (..)
 
 import QuickBudget exposing (model, update)
 import View exposing (view)
-import StartApp.Simple exposing (start)
-import Html exposing (Html)
+import Html.App exposing (beginnerProgram)
 
 
-main : Signal Html.Html
+main : Program Never
 main =
-  start
-    { model = model
-    , update = update
-    , view = view
-    }
+    beginnerProgram
+        { model = model
+        , update = update
+        , view = view
+        }

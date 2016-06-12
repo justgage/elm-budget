@@ -1,4 +1,4 @@
-module QuickBudget (..) where
+module QuickBudget exposing (..)
 
 import Actions as A
 import Types exposing (..)
@@ -6,55 +6,47 @@ import Types exposing (..)
 
 model : Model
 model =
-  { cats =
-      [ "Home"
-      , "Groceries"
-      , "Gages Allowance"
-      ]
-  , budget =
-      { old = []
-      , new =
-          [ { name = "Walmart"
-            , amount = 120.0
-            , cat = "none"
-            }
-          , { name = "Petco"
-            , amount = 8.0
-            , cat = "none"
-            }
-          , { name = "Winco"
-            , amount = 180.0
-            , cat = "none"
-            }
-          , { name = "Zurkers"
-            , amount = 8.0
-            , cat = "none"
-            }
-          , { name = "Humble Bundle"
-            , amount = 1.0
-            , cat = "none"
-            }
-          ]
-      }
-  }
+    { cats =
+        [ "Home"
+        , "Groceries"
+        , "Gages Allowance"
+        ]
+    , budget =
+        { old = []
+        , new =
+            [ { name = "Walmart"
+              , amount = 120.0
+              , cat = "none"
+              }
+            , { name = "Petco"
+              , amount = 8.0
+              , cat = "none"
+              }
+            , { name = "Winco"
+              , amount = 180.0
+              , cat = "none"
+              }
+            , { name = "Zurkers"
+              , amount = 8.0
+              , cat = "none"
+              }
+            , { name = "Humble Bundle"
+              , amount = 1.0
+              , cat = "none"
+              }
+            ]
+        }
+    }
 
 
 update : Action -> Model -> Model
 update action model =
-  let
-    _ =
-      Debug.watch "action" action
-  in
-    let
-      _ =
-        Debug.watch "model" (toString model)
-    in
-      case action of
+    case action of
         NoOp ->
-          A.noOp model
+            A.noOp model
 
         Undo ->
-          A.undo model
+            A.undo model
 
         Categorize cat ->
-          A.categorize cat model
+            A.categorize cat model

@@ -1,58 +1,58 @@
-module Actions (..) where
+module Actions exposing (..)
 
 import Types exposing (..)
 
 
 categorize : String -> Model -> Model
 categorize cat model =
-  let
-    { budget } =
-      model
+    let
+        { budget } =
+            model
 
-    { old, new } =
-      budget
-  in
-    case new of
-      -- there's no more to categorize
-      [] ->
-        model
+        { old, new } =
+            budget
+    in
+        case new of
+            -- there's no more to categorize
+            [] ->
+                model
 
-      -- there is more to categorize
-      next :: rest ->
-        let
-          next_cat =
-            { next | cat = cat }
-        in
-          { model
-            | budget =
-                { new = rest
-                , old = next_cat :: old
-                }
-          }
+            -- there is more to categorize
+            next :: rest ->
+                let
+                    next_cat =
+                        { next | cat = cat }
+                in
+                    { model
+                        | budget =
+                            { new = rest
+                            , old = next_cat :: old
+                            }
+                    }
 
 
 noOp : Model -> Model
 noOp =
-  identity
+    identity
 
 
 undo : Model -> Model
 undo model =
-  let
-    { budget } =
-      model
+    let
+        { budget } =
+            model
 
-    { old, new } =
-      budget
-  in
-    case old of
-      [] ->
-        model
+        { old, new } =
+            budget
+    in
+        case old of
+            [] ->
+                model
 
-      last :: old_rest ->
-        { model
-          | budget =
-              { new = last :: new
-              , old = old_rest
-              }
-        }
+            last :: old_rest ->
+                { model
+                    | budget =
+                        { new = last :: new
+                        , old = old_rest
+                        }
+                }

@@ -1,30 +1,30 @@
-module Types (..) where
+module Types exposing (..)
 
 
 type alias Budget =
-  { old : List Expense
-  , new : List Expense
-  }
+    { old : List Expense
+    , new : List Expense
+    }
 
 
 type alias Categories =
-  List String
+    List String
 
 
 type alias Expense =
-  { name : String
-  , amount : Float
-  , cat : String
-  }
+    { name : String
+    , amount : Float
+    , cat : String
+    }
 
 
 type alias Model =
-  { budget : Budget
-  , cats : Categories
-  }
+    { budget : Budget
+    , cats : Categories
+    }
 
 
 type Action
-  = Categorize String
-  | Undo
-  | NoOp
+    = Categorize String
+    | Undo
+    | NoOp
