@@ -7302,10 +7302,22 @@ var _user$project$QuickBudget$model = {
 			])
 	}
 };
+var _user$project$Style$button = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'width', _1: '90px'},
+			{ctor: '_Tuple2', _0: 'height', _1: '100px'}
+		]));
+var _user$project$Style$buttonHolder = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+		{ctor: '_Tuple2', _0: 'flex-direction', _1: 'right'}
+	]);
 var _user$project$View$viewUndoButton = A2(
 	_elm_lang$html$Html$button,
 	_elm_lang$core$Native_List.fromArray(
 		[
+			_user$project$Style$button,
 			_elm_lang$html$Html_Events$onClick(_user$project$Types$Undo)
 		]),
 	_elm_lang$core$Native_List.fromArray(
@@ -7317,6 +7329,7 @@ var _user$project$View$viewCatButton = function (b) {
 		_elm_lang$html$Html$button,
 		_elm_lang$core$Native_List.fromArray(
 			[
+				_user$project$Style$button,
 				_elm_lang$html$Html_Events$onClick(
 				_user$project$Types$Categorize(b))
 			]),
