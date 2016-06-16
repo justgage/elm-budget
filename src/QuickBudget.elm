@@ -7,9 +7,15 @@ import Types exposing (..)
 model : Model
 model =
     { cats =
-        [ "Home"
-        , "Groceries"
-        , "Gages Allowance"
+        [ { name = "Home"
+          , budgeted = 100.0
+          }
+        , { name = "Groceries"
+          , budgeted = 100.0
+          }
+        , { name = "Gages Allowance"
+          , budgeted = 100.0
+          }
         ]
     , budget =
         { old = []

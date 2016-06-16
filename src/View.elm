@@ -4,9 +4,9 @@ import Html exposing (h3, div, button, text, Html)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, style)
 import Types exposing (..)
-import Helpers exposing (..)
+import Helpers exposing (collectExpenses, FullCategory)
 import Style
-import Dict
+import Dict exposing (Dict)
 
 
 viewCategory : ( String, FullCategory ) -> Html msg
@@ -42,10 +42,41 @@ viewExpenseOld =
     viewExpense (style [ ( "color", "black" ) ])
 
 
-viewCatButton : String -> Html Action
-viewCatButton b =
-    button [ Style.button, onClick (Categorize b) ]
-        [ text b, div [] [ text "$ 12 left" ] ]
+viewCatButton : Dict String FullCategory -> Maybe Expense -> String -> Html Action
+viewCatButton cats possibleDeduct catName =
+    let
+        cat =
+            Dict.get catName cats
+                |> Maybe.withDefault (FullCategory 0 [])
+
+        left =
+            cat.amount
+
+        tn x =
+            text <| toString x
+
+        t =
+            text
+    in
+        button [ Style.button, onClick (Categorize catName) ]
+            [ text catName
+            , div []
+                -- amount - possible = total
+                (case possibleDeduct of
+                    Nothing ->
+                        [ t "$ "
+                        , tn left
+                        ]
+
+                    Just { amount } ->
+                        [ tn left
+                        , t " - "
+                        , tn amount
+                        , t "="
+                        , tn (left - amount)
+                        ]
+                )
+            ]
 
 
 viewUndoButton : Html Action
@@ -60,19 +91,24 @@ view model =
         { budget, cats } =
             model
 
+        newExpenses =
+            budget.new
+
+        nextExpense =
+            List.head newExpenses
+
         collectedCats =
             collectExpenses budget.old
+
+        catButton =
+            viewCatButton collectedCats nextExpense
     in
-        let
-            viewButton =
-                viewCatButton
-        in
-            div [ Style.body ]
-                [ -- div [] (List.map viewExpenseOld budget.old),
-                  div []
-                    (List.map viewExpenseNew budget.new |> List.reverse)
-                , div [ Style.buttonHolder ]
-                    (viewUndoButton :: List.map viewButton cats)
-                , div []
-                    [ (viewCategories collectedCats) ]
-                ]
+        div [ Style.body ]
+            [ -- div [] (List.map viewExpenseOld budget.old),
+              div []
+                (List.map viewExpenseNew (newExpenses |> List.reverse))
+            , div [ Style.buttonHolder ]
+                (viewUndoButton :: List.map catButton cats)
+              -- , div []
+              --     [ (viewCategories collectedCats) ]
+            ]

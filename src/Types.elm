@@ -8,7 +8,10 @@ type alias Budget =
 
 
 type alias Categories =
-    List String
+    List
+        { name : String
+        , budgeted : Float
+        }
 
 
 type alias Expense =

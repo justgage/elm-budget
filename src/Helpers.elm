@@ -1,4 +1,4 @@
-module Helpers exposing (..)
+module Helpers exposing (collectExpenses, FullCategory)
 
 import Types exposing (Expense)
 import Dict exposing (Dict)
