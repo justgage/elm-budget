@@ -120,8 +120,10 @@ view model =
     in
         div [ Style.body ]
             [ -- div [] (List.map viewExpenseOld budget.old),
-              div []
-                (List.map viewExpenseNew (newExpenses |> List.reverse))
+              div [ Style.flexGrow, Style.flexDown ]
+                ((div [ Style.flexGrow ] [])
+                    :: (List.map viewExpenseNew (newExpenses |> List.reverse))
+                )
             , div [ Style.buttonHolder ]
                 (viewUndoButton :: List.map catButton cats)
               -- , div []

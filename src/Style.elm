@@ -7,6 +7,10 @@ body =
     style
         [ ( "max-width", "600px" )
         , ( "margin", "0 auto" )
+        , ( "display", "flex" )
+        , ( "align-content", "flex-end" )
+        , ( "height", "100vh" )
+        , ( "flex-direction", "column" )
         ]
 
 
@@ -20,4 +24,18 @@ buttonHolder =
 button =
     style
         [ ( "height", "70px" )
+        , ( "flex-grow", "1" )
+        ]
+
+
+flexGrow =
+    style
+        [ ( "flex-grow", "1" )
+        ]
+
+
+flexDown =
+    style
+        [ ( "display", "flex" )
+        , ( "flex-direction", "column" )
         ]

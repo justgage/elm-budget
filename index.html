@@ -7310,10 +7310,22 @@ var _user$project$QuickBudget$model = {
 			])
 	}
 };
+var _user$project$Style$flexDown = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+			{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'}
+		]));
+var _user$project$Style$flexGrow = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'flex-grow', _1: '1'}
+		]));
 var _user$project$Style$button = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
 		[
-			{ctor: '_Tuple2', _0: 'height', _1: '50px'}
+			{ctor: '_Tuple2', _0: 'height', _1: '70px'},
+			{ctor: '_Tuple2', _0: 'flex-grow', _1: '1'}
 		]));
 var _user$project$Style$buttonHolder = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
@@ -7325,7 +7337,11 @@ var _user$project$Style$body = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
 		[
 			{ctor: '_Tuple2', _0: 'max-width', _1: '600px'},
-			{ctor: '_Tuple2', _0: 'margin', _1: '0 auto'}
+			{ctor: '_Tuple2', _0: 'margin', _1: '0 auto'},
+			{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+			{ctor: '_Tuple2', _0: 'align-content', _1: 'flex-end'},
+			{ctor: '_Tuple2', _0: 'height', _1: '100vh'},
+			{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'}
 		]));
 var _user$project$View$viewUndoButton = A2(
 	_elm_lang$html$Html$button,
@@ -7374,11 +7390,14 @@ var _user$project$View$viewCatButton = F3(
 							return _elm_lang$core$Native_List.fromArray(
 								[
 									t('$ '),
-									tn(left)
+									tn(left),
+									t(' of '),
+									tn(catBudgeted.budgeted)
 								]);
 						} else {
 							var _p1 = _p0._0.amount;
 							var total = left - _p1;
+							var overflow = _elm_lang$core$Native_Utils.cmp(total, 0) < 0;
 							return _elm_lang$core$Native_List.fromArray(
 								[
 									tn(left),
@@ -7393,7 +7412,7 @@ var _user$project$View$viewCatButton = F3(
 									_elm_lang$core$Native_List.fromArray(
 										[
 											t(
-											(_elm_lang$core$Native_Utils.cmp(total, 0) < 0) ? 'overflow!' : '')
+											overflow ? 'warning: overflow!' : '')
 										]))
 								]);
 						}
@@ -7463,11 +7482,19 @@ var _user$project$View$view = function (model) {
 				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
-					[]),
+					[_user$project$Style$flexGrow, _user$project$Style$flexDown]),
 				A2(
-					_elm_lang$core$List$map,
-					_user$project$View$viewExpenseNew,
-					_elm_lang$core$List$reverse(newExpenses))),
+					_elm_lang$core$List_ops['::'],
+					A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[_user$project$Style$flexGrow]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$View$viewExpenseNew,
+						_elm_lang$core$List$reverse(newExpenses)))),
 				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
