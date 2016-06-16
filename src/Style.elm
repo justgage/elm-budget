@@ -5,7 +5,7 @@ import Html.Attributes exposing (class, style)
 
 body =
     style
-        [ ( "max-width", "500px" )
+        [ ( "max-width", "600px" )
         , ( "margin", "0 auto" )
         ]
 
@@ -19,5 +19,5 @@ buttonHolder =
 
 button =
     style
-        [ ( "height", "50px" )
+        [ ( "height", "70px" )
         ]

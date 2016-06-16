@@ -11,10 +11,10 @@ model =
           , budgeted = 100.0
           }
         , { name = "Groceries"
-          , budgeted = 100.0
+          , budgeted = 500.0
           }
         , { name = "Gages Allowance"
-          , budgeted = 100.0
+          , budgeted = 25.0
           }
         ]
     , budget =

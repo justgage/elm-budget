@@ -42,15 +42,14 @@ viewExpenseOld =
     viewExpense (style [ ( "color", "black" ) ])
 
 
-viewCatButton : Dict String FullCategory -> Maybe Expense -> String -> Html Action
-viewCatButton cats possibleDeduct catName =
+viewCatButton : Dict String FullCategory -> Maybe Expense -> Category -> Html Action
+viewCatButton cats possibleDeduct catBudgeted =
     let
-        cat =
-            Dict.get catName cats
-                |> Maybe.withDefault (FullCategory 0 [])
-
         left =
-            cat.amount
+            catBudgeted.budgeted
+                - (Dict.get catBudgeted.name cats
+                    |> Maybe.withDefault (FullCategory 0 [])
+                  ).amount
 
         tn x =
             text <| toString x
@@ -58,23 +57,39 @@ viewCatButton cats possibleDeduct catName =
         t =
             text
     in
-        button [ Style.button, onClick (Categorize catName) ]
-            [ text catName
+        button [ Style.button, onClick (Categorize catBudgeted.name) ]
+            [ text catBudgeted.name
             , div []
                 -- amount - possible = total
                 (case possibleDeduct of
                     Nothing ->
                         [ t "$ "
                         , tn left
+                        , t " of "
+                        , tn catBudgeted.budgeted
                         ]
 
                     Just { amount } ->
-                        [ tn left
-                        , t " - "
-                        , tn amount
-                        , t "="
-                        , tn (left - amount)
-                        ]
+                        let
+                            total =
+                                (left - amount)
+
+                            overflow =
+                                total < 0
+                        in
+                            [ tn left
+                            , t " - "
+                            , tn amount
+                            , t "="
+                            , tn total
+                            , div []
+                                [ t
+                                    <| if overflow then
+                                        "warning: overflow!"
+                                       else
+                                        ""
+                                ]
+                            ]
                 )
             ]
 

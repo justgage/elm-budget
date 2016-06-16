@@ -7194,6 +7194,10 @@ var _user$project$Types$Budget = F2(
 	function (a, b) {
 		return {old: a, $new: b};
 	});
+var _user$project$Types$Category = F2(
+	function (a, b) {
+		return {name: a, budgeted: b};
+	});
 var _user$project$Types$Expense = F3(
 	function (a, b, c) {
 		return {name: a, amount: b, cat: c};
@@ -7290,8 +7294,8 @@ var _user$project$QuickBudget$model = {
 	cats: _elm_lang$core$Native_List.fromArray(
 		[
 			{name: 'Home', budgeted: 100.0},
-			{name: 'Groceries', budgeted: 100.0},
-			{name: 'Gages Allowance', budgeted: 100.0}
+			{name: 'Groceries', budgeted: 500.0},
+			{name: 'Gages Allowance', budgeted: 25.0}
 		]),
 	budget: {
 		old: _elm_lang$core$Native_List.fromArray(
@@ -7320,7 +7324,7 @@ var _user$project$Style$buttonHolder = _elm_lang$html$Html_Attributes$style(
 var _user$project$Style$body = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
 		[
-			{ctor: '_Tuple2', _0: 'max-width', _1: '500px'},
+			{ctor: '_Tuple2', _0: 'max-width', _1: '600px'},
 			{ctor: '_Tuple2', _0: 'margin', _1: '0 auto'}
 		]));
 var _user$project$View$viewUndoButton = A2(
@@ -7335,32 +7339,31 @@ var _user$project$View$viewUndoButton = A2(
 			_elm_lang$html$Html$text('Undo')
 		]));
 var _user$project$View$viewCatButton = F3(
-	function (cats, possibleDeduct, catName) {
+	function (cats, possibleDeduct, catBudgeted) {
 		var t = _elm_lang$html$Html$text;
 		var tn = function (x) {
 			return _elm_lang$html$Html$text(
 				_elm_lang$core$Basics$toString(x));
 		};
-		var cat = A2(
+		var left = catBudgeted.budgeted - A2(
 			_elm_lang$core$Maybe$withDefault,
 			A2(
 				_user$project$Helpers$FullCategory,
 				0,
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-			A2(_elm_lang$core$Dict$get, catName, cats));
-		var left = cat.amount;
+			A2(_elm_lang$core$Dict$get, catBudgeted.name, cats)).amount;
 		return A2(
 			_elm_lang$html$Html$button,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_user$project$Style$button,
 					_elm_lang$html$Html_Events$onClick(
-					_user$project$Types$Categorize(catName))
+					_user$project$Types$Categorize(catBudgeted.name))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text(catName),
+					_elm_lang$html$Html$text(catBudgeted.name),
 					A2(
 					_elm_lang$html$Html$div,
 					_elm_lang$core$Native_List.fromArray(
@@ -7375,13 +7378,23 @@ var _user$project$View$viewCatButton = F3(
 								]);
 						} else {
 							var _p1 = _p0._0.amount;
+							var total = left - _p1;
 							return _elm_lang$core$Native_List.fromArray(
 								[
 									tn(left),
 									t(' - '),
 									tn(_p1),
 									t('='),
-									tn(left - _p1)
+									tn(total),
+									A2(
+									_elm_lang$html$Html$div,
+									_elm_lang$core$Native_List.fromArray(
+										[]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											t(
+											(_elm_lang$core$Native_Utils.cmp(total, 0) < 0) ? 'overflow!' : '')
+										]))
 								]);
 						}
 					}())
