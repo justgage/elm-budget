@@ -17,14 +17,20 @@ body =
 buttonHolder =
     style
         [ ( "display", "flex" )
-        , ( "flex-direction", "right" )
+        , ( "flex-direction", "column" )
+        , ( "flex-wrap", " wrap" )
+        , ( "justify-content", " space-between" )
+        , ( "align-content", " stretch" )
+        , ( "align-items", " stretch" )
+        , ( "height", "50vh" )
         ]
 
 
 button =
     style
-        [ ( "height", "70px" )
-        , ( "flex-grow", "1" )
+        [ --( "height", "70px" )
+          ( "flex-grow", "1" )
+        , ( "min-height", "80px" )
         ]
 
 

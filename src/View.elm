@@ -119,13 +119,10 @@ view model =
             viewCatButton collectedCats nextExpense
     in
         div [ Style.body ]
-            [ -- div [] (List.map viewExpenseOld budget.old),
-              div [ Style.flexGrow, Style.flexDown ]
+            [ div [ Style.flexGrow, Style.flexDown ]
                 ((div [ Style.flexGrow ] [])
                     :: (List.map viewExpenseNew (newExpenses |> List.reverse))
                 )
             , div [ Style.buttonHolder ]
                 (viewUndoButton :: List.map catButton cats)
-              -- , div []
-              --     [ (viewCategories collectedCats) ]
             ]

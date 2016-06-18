@@ -7,7 +7,22 @@ import Types exposing (..)
 model : Model
 model =
     { cats =
-        [ { name = "Home"
+        [ { name = "Medical"
+          , budgeted = 100.0
+          }
+        , { name = "Darvil"
+          , budgeted = 100.0
+          }
+        , { name = "Gas"
+          , budgeted = 100.0
+          }
+        , { name = "Jessicas's Allowance"
+          , budgeted = 100.0
+          }
+        , { name = "Gage's Allowance"
+          , budgeted = 100.0
+          }
+        , { name = "Home"
           , budgeted = 100.0
           }
         , { name = "Groceries"
