@@ -31,6 +31,15 @@ categorize cat model =
                     }
 
 
+hightlight : Int -> Model -> Model
+hightlight id model =
+    model
+
+
+
+-- do nothing
+
+
 noOp : Model -> Model
 noOp =
     identity

@@ -1,8 +1,8 @@
 module View exposing (view)
 
-import Html exposing (h3, div, button, text, Html)
-import Html.Events exposing (onClick)
-import Html.Attributes exposing (class, style)
+import Html exposing (body, h3, div, button, text, Html, img)
+import Html.Events exposing (onClick, onMouseEnter)
+import Html.Attributes exposing (class, style, src)
 import Types exposing (..)
 import Helpers exposing (collectExpenses, FullCategory)
 import Style
@@ -34,7 +34,7 @@ viewExpense sty x =
 
 viewExpenseNew : Expense -> Html Action
 viewExpenseNew =
-    viewExpense (style [ ( "color", "red" ) ])
+    viewExpense (style [])
 
 
 viewExpenseOld : Expense -> Html Action
@@ -57,7 +57,7 @@ viewCatButton cats possibleDeduct catBudgeted =
         t =
             text
     in
-        button [ Style.button, onClick (Categorize catBudgeted.name) ]
+        button [ class "button", Style.button, onClick (Categorize catBudgeted.name) ]
             [ text catBudgeted.name
             , div []
                 -- amount - possible = total
@@ -96,7 +96,7 @@ viewCatButton cats possibleDeduct catBudgeted =
 
 viewUndoButton : Html Action
 viewUndoButton =
-    button [ Style.button, onClick Undo ]
+    div [ class "button", Style.button, onClick Undo ]
         [ text "Undo" ]
 
 
@@ -118,11 +118,16 @@ view model =
         catButton =
             viewCatButton collectedCats nextExpense
     in
-        div [ Style.body ]
-            [ div [ Style.flexGrow, Style.flexDown ]
-                ((div [ Style.flexGrow ] [])
-                    :: (List.map viewExpenseNew (newExpenses |> List.reverse))
-                )
-            , div [ Style.buttonHolder ]
-                (viewUndoButton :: List.map catButton cats)
+        body []
+            [ div []
+                [ img [ src "/flowbudget.png", style [ ( "margin", "0 auto" ) ] ] []
+                , div [ Style.body ]
+                    [ div [ Style.flexGrow, Style.flexDown, Style.scroll ]
+                        ((div [ Style.flexGrow ] [])
+                            :: (List.map viewExpenseNew (newExpenses |> List.reverse))
+                        )
+                    , div [ Style.buttonHolder ]
+                        (viewUndoButton :: List.map catButton cats)
+                    ]
+                ]
             ]

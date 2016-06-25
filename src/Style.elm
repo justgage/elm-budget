@@ -28,9 +28,9 @@ buttonHolder =
 
 button =
     style
-        [ --( "height", "70px" )
-          ( "flex-grow", "1" )
+        [ ( "flex-grow", "1" )
         , ( "min-height", "80px" )
+        , ( "background-color", "lightgreen" )
         ]
 
 
@@ -44,4 +44,10 @@ flexDown =
     style
         [ ( "display", "flex" )
         , ( "flex-direction", "column" )
+        ]
+
+
+scroll =
+    style
+        [ ( "overflow", "scroll" )
         ]

@@ -32,5 +32,6 @@ type alias Model =
 
 type Action
     = Categorize String
+    | Hightlight Int
     | Undo
     | NoOp

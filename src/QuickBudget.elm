@@ -69,5 +69,8 @@ update action model =
         Undo ->
             A.undo model
 
+        Hightlight id ->
+            A.hightlight id model
+
         Categorize cat ->
             A.categorize cat model
