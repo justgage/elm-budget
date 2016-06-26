@@ -1,6 +1,7 @@
 module Main exposing (..)
 
-import QuickBudget exposing (model, update)
+import QuickBudget exposing (model)
+import Actions exposing (update)
 import View exposing (view)
 import Html.App exposing (beginnerProgram)
 

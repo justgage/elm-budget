@@ -1,6 +1,5 @@
 module QuickBudget exposing (..)
 
-import Actions as A
 import Types exposing (..)
 
 
@@ -70,19 +69,3 @@ model =
             ]
         }
     }
-
-
-update : Action -> Model -> Model
-update action model =
-    case action of
-        NoOp ->
-            A.noOp model
-
-        Undo ->
-            A.undo model
-
-        Hightlight id ->
-            A.hightlight id model
-
-        Categorize cat ->
-            A.categorize cat model

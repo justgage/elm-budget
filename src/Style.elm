@@ -16,8 +16,17 @@ expense =
     ]
 
 
+money =
+    [ ( "font-family", "Georgia serif" ) ]
+
+
+red =
+    [ ( "color", "red" ) ]
+
+
 body =
-    [ ( "max-width", "600px" )
+    [ ( "font-family", "sans-serif" )
+    , ( "max-width", "600px" )
     , ( "margin", "0 auto" )
     , ( "display", "flex" )
     , ( "align-content", "flex-end" )
@@ -39,8 +48,8 @@ buttonHolder =
 
 button =
     [ ( "flex-grow", "1" )
-    , ( "min-height", "80px" )
-    , ( "background-color", "lightgreen" )
+    , ( "min-height", "50px" )
+      --, ( "background-color", "lightgreen" )
     ]
 
 

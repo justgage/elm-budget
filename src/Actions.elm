@@ -3,6 +3,27 @@ module Actions exposing (..)
 import Types exposing (..)
 
 
+update : Action -> Model -> Model
+update action model =
+    case action of
+        NoOp ->
+            noOp model
+
+        Undo ->
+            undo model
+
+        Categorize cat ->
+            categorize cat model
+
+        Defer ->
+            defer model
+
+
+defer : Model -> Model
+defer model =
+    categorize "flaged" model
+
+
 categorize : String -> Model -> Model
 categorize cat model =
     let
@@ -31,11 +52,6 @@ categorize cat model =
                     }
 
 
-hightlight : Int -> Model -> Model
-hightlight id model =
-    model
-
-
 
 -- do nothing
 
@@ -43,6 +59,10 @@ hightlight id model =
 noOp : Model -> Model
 noOp =
     identity
+
+
+
+-- undo last categorize (category is still there)
 
 
 undo : Model -> Model

@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Html exposing (body, h3, div, button, text, Html, img, em)
+import Html exposing (body, h3, div, button, text, Html, img, em, span, strong)
 import Html.Events exposing (onClick, onMouseEnter)
 import Html.Attributes exposing (class, style, src)
 import Types exposing (..)
@@ -9,11 +9,19 @@ import Style exposing (styles)
 import Dict exposing (Dict)
 
 
+viewMoney money =
+    if money >= 0 then
+        span [ style Style.money ] [ text "$", text <| toString <| (money) ]
+    else
+        span [ styles [ Style.money, Style.red ] ] [ text "($", text <| toString <| (money), text ")" ]
+
+
 viewCategory : ( String, FullCategory ) -> Html msg
 viewCategory ( name, cat ) =
     div []
         [ h3 [] [ text name ]
-        , text ("Total: " ++ (toString cat.amount))
+        , text "Total: "
+        , viewMoney cat.amount
         ]
 
 
@@ -27,8 +35,8 @@ viewExpense : Expense -> Html msg
 viewExpense x =
     div [ style Style.expense ]
         [ h3 [] [ text (x.name) ]
-        , div [] [ text "Category: ", text (x.cat) ]
-        , div [] [ text ("Amount: $" ++ (toString x.amount)) ]
+        , div [ style [ ( "font-size", "3em" ) ] ] [ viewMoney x.amount ]
+        , em [] [ text "Category: ", text (x.cat) ]
         ]
 
 
@@ -48,15 +56,15 @@ viewCatButton cats possibleDeduct catBudgeted =
             text
     in
         button [ class "button", style Style.button, onClick (Categorize catBudgeted.name) ]
-            [ text catBudgeted.name
+            [ strong [] [ text catBudgeted.name ]
             , div []
                 -- amount - possible = total
                 (case possibleDeduct of
                     Nothing ->
-                        [ t "$ "
-                        , tn left
+                        [ viewMoney left
                         , t " of "
-                        , tn catBudgeted.budgeted
+                        , viewMoney catBudgeted.budgeted
+                        , t " left"
                         ]
 
                     Just { amount } ->
@@ -67,28 +75,27 @@ viewCatButton cats possibleDeduct catBudgeted =
                             overflow =
                                 total < 0
                         in
-                            [ tn left
+                            [ viewMoney left
                             , t " → "
-                            , tn total
-                            , div []
-                                [ t
-                                    <| if overflow then
-                                        "warning: overflow!"
-                                       else
-                                        ""
-                                ]
+                            , viewMoney total
                             ]
                 )
             ]
 
 
+viewDeferButton : Html Action
+viewDeferButton =
+    button [ class "button", style Style.button, onClick Defer ]
+        [ text "Defer" ]
+
+
 viewUndoButton : Html Action
 viewUndoButton =
-    div [ class "button", style Style.button, onClick Undo ]
+    button [ class "button", style Style.button, onClick Undo ]
         [ text "Undo" ]
 
 
-scrollList maybeExpense =
+scrollList maybeExpense numLeft =
     case maybeExpense of
         Nothing ->
             h3 [] [ text "All done :)" ]
@@ -101,8 +108,9 @@ scrollList maybeExpense =
                     , Style.halfHeight
                     ]
                 ]
-                [ (div [ style Style.flexGrow ] [])
-                , (viewExpense expense)
+                [ div [ style Style.flexGrow ] []
+                , viewExpense expense
+                , em [] [ text <| toString <| numLeft, text " left to categorize..." ]
                 ]
 
 
@@ -131,7 +139,7 @@ view model =
     in
         div [ style Style.body ]
             [ logo
-            , scrollList nextExpense
+            , scrollList nextExpense (List.length budget.new)
             , div [ style Style.buttonHolder ]
-                (viewUndoButton :: catButtons)
+                (List.concat [ [ viewUndoButton, viewDeferButton ], catButtons ])
             ]
