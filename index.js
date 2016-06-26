@@ -7235,11 +7235,9 @@ var _user$project$Types$Model = F2(
 	function (a, b) {
 		return {budget: a, cats: b};
 	});
+var _user$project$Types$Defer = {ctor: 'Defer'};
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
 var _user$project$Types$Undo = {ctor: 'Undo'};
-var _user$project$Types$Hightlight = function (a) {
-	return {ctor: 'Hightlight', _0: a};
-};
 var _user$project$Types$Categorize = function (a) {
 	return {ctor: 'Categorize', _0: a};
 };
@@ -7265,10 +7263,6 @@ var _user$project$Actions$undo = function (model) {
 	}
 };
 var _user$project$Actions$noOp = _elm_lang$core$Basics$identity;
-var _user$project$Actions$hightlight = F2(
-	function (id, model) {
-		return model;
-	});
 var _user$project$Actions$categorize = F2(
 	function (cat, model) {
 		var _p3 = model;
@@ -7291,6 +7285,23 @@ var _user$project$Actions$categorize = F2(
 						old: A2(_elm_lang$core$List_ops['::'], next_cat, old)
 					}
 				});
+		}
+	});
+var _user$project$Actions$defer = function (model) {
+	return A2(_user$project$Actions$categorize, 'flaged', model);
+};
+var _user$project$Actions$update = F2(
+	function (action, model) {
+		var _p6 = action;
+		switch (_p6.ctor) {
+			case 'NoOp':
+				return _user$project$Actions$noOp(model);
+			case 'Undo':
+				return _user$project$Actions$undo(model);
+			case 'Categorize':
+				return A2(_user$project$Actions$categorize, _p6._0, model);
+			default:
+				return _user$project$Actions$defer(model);
 		}
 	});
 
@@ -7317,31 +7328,16 @@ var _user$project$Helpers$collectExpenses = function (expences) {
 	return A3(_elm_lang$core$List$foldl, _user$project$Helpers$dictReduce, _elm_lang$core$Dict$empty, expences);
 };
 
-var _user$project$QuickBudget$update = F2(
-	function (action, model) {
-		var _p0 = action;
-		switch (_p0.ctor) {
-			case 'NoOp':
-				return _user$project$Actions$noOp(model);
-			case 'Undo':
-				return _user$project$Actions$undo(model);
-			case 'Hightlight':
-				return A2(_user$project$Actions$hightlight, _p0._0, model);
-			default:
-				return A2(_user$project$Actions$categorize, _p0._0, model);
-		}
-	});
 var _user$project$QuickBudget$model = {
 	cats: _elm_lang$core$Native_List.fromArray(
 		[
 			{name: 'Medical', budgeted: 100.0},
-			{name: 'Darvil', budgeted: 100.0},
 			{name: 'Gas', budgeted: 100.0},
-			{name: 'Jessicas\'s Allowance', budgeted: 100.0},
-			{name: 'Gage\'s Allowance', budgeted: 100.0},
+			{name: 'Jessicas', budgeted: 100.0},
+			{name: 'Gage', budgeted: 25.0},
+			{name: 'Darvil', budgeted: 100.0},
 			{name: 'Home', budgeted: 100.0},
-			{name: 'Groceries', budgeted: 500.0},
-			{name: 'Gages Allowance', budgeted: 25.0}
+			{name: 'Groceries', budgeted: 500.0}
 		]),
 	budget: {
 		old: _elm_lang$core$Native_List.fromArray(
@@ -7349,6 +7345,9 @@ var _user$project$QuickBudget$model = {
 		$new: _elm_lang$core$Native_List.fromArray(
 			[
 				{name: 'Walmart', amount: 120.0, cat: 'none'},
+				{name: 'Zelda', amount: 8.0, cat: 'none'},
+				{name: 'Disney Land', amount: 20000.0, cat: 'none'},
+				{name: 'Petco', amount: 8.0, cat: 'none'},
 				{name: 'Petco', amount: 8.0, cat: 'none'},
 				{name: 'Winco', amount: 180.0, cat: 'none'},
 				{name: 'Zurkers', amount: 8.0, cat: 'none'},
@@ -7357,65 +7356,253 @@ var _user$project$QuickBudget$model = {
 	}
 };
 
-var _user$project$Style$scroll = _elm_lang$html$Html_Attributes$style(
+var _user$project$Style$styles = function (lst) {
+	return _elm_lang$html$Html_Attributes$style(
+		_elm_lang$core$List$concat(lst));
+};
+var _user$project$Style$halfHeight = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'height', _1: '100vh'}
+	]);
+var _user$project$Style$scroll = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'overflow', _1: 'scroll'}
+	]);
+var _user$project$Style$flexDown = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+		{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'}
+	]);
+var _user$project$Style$flexGrow = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'flex-grow', _1: '1'}
+	]);
+var _user$project$Style$button = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'flex-grow', _1: '1'},
+		{ctor: '_Tuple2', _0: 'min-height', _1: '50px'}
+	]);
+var _user$project$Style$buttonHolder = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+		{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'},
+		{ctor: '_Tuple2', _0: 'flex-wrap', _1: ' wrap'},
+		{ctor: '_Tuple2', _0: 'justify-content', _1: ' space-between'},
+		{ctor: '_Tuple2', _0: 'align-content', _1: ' stretch'},
+		{ctor: '_Tuple2', _0: 'align-items', _1: ' stretch'},
+		{ctor: '_Tuple2', _0: 'height', _1: '50vh'}
+	]);
+var _user$project$Style$body = A2(
+	_elm_lang$core$Basics_ops['++'],
 	_elm_lang$core$Native_List.fromArray(
 		[
-			{ctor: '_Tuple2', _0: 'overflow', _1: 'scroll'}
-		]));
-var _user$project$Style$flexDown = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
-			{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'}
-		]));
-var _user$project$Style$flexGrow = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'flex-grow', _1: '1'}
-		]));
-var _user$project$Style$button = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'flex-grow', _1: '1'},
-			{ctor: '_Tuple2', _0: 'min-height', _1: '80px'},
-			{ctor: '_Tuple2', _0: 'background-color', _1: 'lightgreen'}
-		]));
-var _user$project$Style$buttonHolder = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
-			{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'},
-			{ctor: '_Tuple2', _0: 'flex-wrap', _1: ' wrap'},
-			{ctor: '_Tuple2', _0: 'justify-content', _1: ' space-between'},
-			{ctor: '_Tuple2', _0: 'align-content', _1: ' stretch'},
-			{ctor: '_Tuple2', _0: 'align-items', _1: ' stretch'},
-			{ctor: '_Tuple2', _0: 'height', _1: '50vh'}
-		]));
-var _user$project$Style$body = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
+			{ctor: '_Tuple2', _0: 'font-family', _1: 'sans-serif'},
 			{ctor: '_Tuple2', _0: 'max-width', _1: '600px'},
 			{ctor: '_Tuple2', _0: 'margin', _1: '0 auto'},
 			{ctor: '_Tuple2', _0: 'display', _1: 'flex'},
 			{ctor: '_Tuple2', _0: 'align-content', _1: 'flex-end'},
-			{ctor: '_Tuple2', _0: 'height', _1: '100vh'},
 			{ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'}
-		]));
+		]),
+	_user$project$Style$halfHeight);
+var _user$project$Style$red = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'color', _1: 'red'}
+	]);
+var _user$project$Style$money = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'font-family', _1: 'Georgia serif'}
+	]);
+var _user$project$Style$expense = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+		{ctor: '_Tuple2', _0: 'align-content', _1: 'center'},
+		{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+	]);
+var _user$project$Style$logo = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'float', _1: 'left'},
+		{ctor: '_Tuple2', _0: 'margin', _1: '0 auto'}
+	]);
 
+var _user$project$View$logo = A2(
+	_elm_lang$html$Html$img,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$src('/flowbudget.png'),
+			_elm_lang$html$Html_Attributes$style(_user$project$Style$logo)
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[]));
 var _user$project$View$viewUndoButton = A2(
-	_elm_lang$html$Html$div,
+	_elm_lang$html$Html$button,
 	_elm_lang$core$Native_List.fromArray(
 		[
 			_elm_lang$html$Html_Attributes$class('button'),
-			_user$project$Style$button,
+			_elm_lang$html$Html_Attributes$style(_user$project$Style$button),
 			_elm_lang$html$Html_Events$onClick(_user$project$Types$Undo)
 		]),
 	_elm_lang$core$Native_List.fromArray(
 		[
 			_elm_lang$html$Html$text('Undo')
 		]));
-var _user$project$View$viewCatButton = F3(
-	function (cats, possibleDeduct, catBudgeted) {
+var _user$project$View$viewDeferButton = A2(
+	_elm_lang$html$Html$button,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('button'),
+			_elm_lang$html$Html_Attributes$style(_user$project$Style$button),
+			_elm_lang$html$Html_Events$onClick(_user$project$Types$Defer)
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html$text('Skip')
+		]));
+var _user$project$View$viewMoney = function (money) {
+	return (_elm_lang$core$Native_Utils.cmp(money, 0) > -1) ? A2(
+		_elm_lang$html$Html$span,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(_user$project$Style$money)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('$'),
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(money))
+			])) : A2(
+		_elm_lang$html$Html$span,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Style$styles(
+				_elm_lang$core$Native_List.fromArray(
+					[_user$project$Style$money, _user$project$Style$red]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(' - $'),
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(0 - money))
+			]));
+};
+var _user$project$View$viewCategory = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h3,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(_p1._0)
+					])),
+				_elm_lang$html$Html$text('Total: '),
+				_user$project$View$viewMoney(_p1._1.amount)
+			]));
+};
+var _user$project$View$viewCategories = function (cats) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$View$viewCategory,
+			_elm_lang$core$Dict$toList(cats)));
+};
+var _user$project$View$viewExpense = function (x) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(_user$project$Style$expense)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h3,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(x.name)
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'font-size', _1: '3em'}
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$View$viewMoney(x.amount)
+					])),
+				A2(
+				_elm_lang$html$Html$em,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Category: '),
+						_elm_lang$html$Html$text(x.cat)
+					]))
+			]));
+};
+var _user$project$View$scrollList = F2(
+	function (maybeExpense, numLeft) {
+		var _p2 = maybeExpense;
+		if (_p2.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$html$Html$h3,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('All done :)')
+					]));
+		} else {
+			return A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Style$styles(
+						_elm_lang$core$Native_List.fromArray(
+							[_user$project$Style$flexGrow, _user$project$Style$flexDown, _user$project$Style$halfHeight]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$style(_user$project$Style$flexGrow)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A2(
+						_elm_lang$html$Html$em,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(numLeft)),
+								_elm_lang$html$Html$text(' left to categorize...')
+							])),
+						_user$project$View$viewExpense(_p2._0)
+					]));
+		}
+	});
+var _user$project$View$viewCatButton = F2(
+	function (cats, catBudgeted) {
 		var t = _elm_lang$html$Html$text;
 		var tn = function (x) {
 			return _elm_lang$html$Html$text(
@@ -7434,69 +7621,19 @@ var _user$project$View$viewCatButton = F3(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html_Attributes$class('button'),
-					_user$project$Style$button,
+					_elm_lang$html$Html_Attributes$style(_user$project$Style$button),
 					_elm_lang$html$Html_Events$onClick(
 					_user$project$Types$Categorize(catBudgeted.name))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text(catBudgeted.name),
 					A2(
-					_elm_lang$html$Html$div,
+					_elm_lang$html$Html$strong,
 					_elm_lang$core$Native_List.fromArray(
 						[]),
-					function () {
-						var _p0 = possibleDeduct;
-						if (_p0.ctor === 'Nothing') {
-							return _elm_lang$core$Native_List.fromArray(
-								[
-									t('$ '),
-									tn(left),
-									t(' of '),
-									tn(catBudgeted.budgeted)
-								]);
-						} else {
-							var _p1 = _p0._0.amount;
-							var total = left - _p1;
-							var overflow = _elm_lang$core$Native_Utils.cmp(total, 0) < 0;
-							return _elm_lang$core$Native_List.fromArray(
-								[
-									tn(left),
-									t(' - '),
-									tn(_p1),
-									t('='),
-									tn(total),
-									A2(
-									_elm_lang$html$Html$div,
-									_elm_lang$core$Native_List.fromArray(
-										[]),
-									_elm_lang$core$Native_List.fromArray(
-										[
-											t(
-											overflow ? 'warning: overflow!' : '')
-										]))
-								]);
-						}
-					}())
-				]));
-	});
-var _user$project$View$viewExpense = F2(
-	function (sty, x) {
-		return A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$class('card')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$h3,
-					_elm_lang$core$Native_List.fromArray(
-						[sty]),
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html$text(x.name)
+							_elm_lang$html$Html$text(catBudgeted.name)
 						])),
 					A2(
 					_elm_lang$html$Html$div,
@@ -7504,136 +7641,53 @@ var _user$project$View$viewExpense = F2(
 						[]),
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html$text(x.cat)
-						])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'$',
-								_elm_lang$core$Basics$toString(x.amount)))
+							_user$project$View$viewMoney(left),
+							t(' of '),
+							_user$project$View$viewMoney(catBudgeted.budgeted),
+							t(' left')
 						]))
 				]));
 	});
-var _user$project$View$viewExpenseNew = _user$project$View$viewExpense(
-	_elm_lang$html$Html_Attributes$style(
-		_elm_lang$core$Native_List.fromArray(
-			[])));
 var _user$project$View$view = function (model) {
-	var _p2 = model;
-	var budget = _p2.budget;
-	var cats = _p2.cats;
-	var newExpenses = budget.$new;
-	var nextExpense = _elm_lang$core$List$head(newExpenses);
+	var _p3 = model;
+	var budget = _p3.budget;
+	var cats = _p3.cats;
+	var nextExpense = _elm_lang$core$List$head(budget.$new);
 	var collectedCats = _user$project$Helpers$collectExpenses(budget.old);
-	var catButton = A2(_user$project$View$viewCatButton, collectedCats, nextExpense);
+	var catButton = _user$project$View$viewCatButton(collectedCats);
+	var catButtons = A2(_elm_lang$core$List$map, catButton, cats);
 	return A2(
-		_elm_lang$html$Html$body,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
+		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
+				_elm_lang$html$Html_Attributes$style(_user$project$Style$body)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$View$logo,
+				A2(
+				_user$project$View$scrollList,
+				nextExpense,
+				_elm_lang$core$List$length(budget.$new)),
 				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
 					[
-						A2(
-						_elm_lang$html$Html$img,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$src('/flowbudget.png'),
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'margin', _1: '0 auto'}
-									]))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_elm_lang$html$Html$div,
-						_elm_lang$core$Native_List.fromArray(
-							[_user$project$Style$body]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(
-								_elm_lang$html$Html$div,
-								_elm_lang$core$Native_List.fromArray(
-									[_user$project$Style$flexGrow, _user$project$Style$flexDown, _user$project$Style$scroll]),
-								A2(
-									_elm_lang$core$List_ops['::'],
-									A2(
-										_elm_lang$html$Html$div,
-										_elm_lang$core$Native_List.fromArray(
-											[_user$project$Style$flexGrow]),
-										_elm_lang$core$Native_List.fromArray(
-											[])),
-									A2(
-										_elm_lang$core$List$map,
-										_user$project$View$viewExpenseNew,
-										_elm_lang$core$List$reverse(newExpenses)))),
-								A2(
-								_elm_lang$html$Html$div,
-								_elm_lang$core$Native_List.fromArray(
-									[_user$project$Style$buttonHolder]),
-								A2(
-									_elm_lang$core$List_ops['::'],
-									_user$project$View$viewUndoButton,
-									A2(_elm_lang$core$List$map, catButton, cats)))
-							]))
-					]))
+						_elm_lang$html$Html_Attributes$style(_user$project$Style$buttonHolder)
+					]),
+				_elm_lang$core$List$concat(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$core$Native_List.fromArray(
+							[_user$project$View$viewUndoButton, _user$project$View$viewDeferButton]),
+							catButtons
+						])))
 			]));
-};
-var _user$project$View$viewExpenseOld = _user$project$View$viewExpense(
-	_elm_lang$html$Html_Attributes$style(
-		_elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: 'color', _1: 'black'}
-			])));
-var _user$project$View$viewCategory = function (_p3) {
-	var _p4 = _p3;
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$h3,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(_p4._0)
-					])),
-				_elm_lang$html$Html$text(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'Total: ',
-					_elm_lang$core$Basics$toString(_p4._1.amount)))
-			]));
-};
-var _user$project$View$viewCategories = function (cats) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$View$viewCategory,
-			_elm_lang$core$Dict$toList(cats)));
 };
 
 var _user$project$Main$main = {
 	main: _elm_lang$html$Html_App$beginnerProgram(
-		{model: _user$project$QuickBudget$model, update: _user$project$QuickBudget$update, view: _user$project$View$view})
+		{model: _user$project$QuickBudget$model, update: _user$project$Actions$update, view: _user$project$View$view})
 };
 
 var Elm = {};
