@@ -39,6 +39,18 @@ model =
               , amount = 120.0
               , cat = "none"
               }
+            , { name = "Zelda"
+              , amount = 8.0
+              , cat = "none"
+              }
+            , { name = "Disney Land"
+              , amount = 20000.0
+              , cat = "none"
+              }
+            , { name = "Petco"
+              , amount = 8.0
+              , cat = "none"
+              }
             , { name = "Petco"
               , amount = 8.0
               , cat = "none"
