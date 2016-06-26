@@ -13,7 +13,7 @@ viewMoney money =
     if money >= 0 then
         span [ style Style.money ] [ text "$", text <| toString <| (money) ]
     else
-        span [ styles [ Style.money, Style.red ] ] [ text "($", text <| toString <| (money), text ")" ]
+        span [ styles [ Style.money, Style.red ] ] [ text " - $", text <| toString <| (-money) ]
 
 
 viewCategory : ( String, FullCategory ) -> Html msg
@@ -40,8 +40,8 @@ viewExpense x =
         ]
 
 
-viewCatButton : Dict String FullCategory -> Maybe Expense -> Category -> Html Action
-viewCatButton cats possibleDeduct catBudgeted =
+viewCatButton : Dict String FullCategory -> Category -> Html Action
+viewCatButton cats catBudgeted =
     let
         left =
             catBudgeted.budgeted
@@ -59,34 +59,18 @@ viewCatButton cats possibleDeduct catBudgeted =
             [ strong [] [ text catBudgeted.name ]
             , div []
                 -- amount - possible = total
-                (case possibleDeduct of
-                    Nothing ->
-                        [ viewMoney left
-                        , t " of "
-                        , viewMoney catBudgeted.budgeted
-                        , t " left"
-                        ]
-
-                    Just { amount } ->
-                        let
-                            total =
-                                (left - amount)
-
-                            overflow =
-                                total < 0
-                        in
-                            [ viewMoney left
-                            , t " → "
-                            , viewMoney total
-                            ]
-                )
+                [ viewMoney left
+                , t " of "
+                , viewMoney catBudgeted.budgeted
+                , t " left"
+                ]
             ]
 
 
 viewDeferButton : Html Action
 viewDeferButton =
     button [ class "button", style Style.button, onClick Defer ]
-        [ text "Defer" ]
+        [ text "Skip" ]
 
 
 viewUndoButton : Html Action
@@ -109,8 +93,9 @@ scrollList maybeExpense numLeft =
                     ]
                 ]
                 [ div [ style Style.flexGrow ] []
-                , viewExpense expense
+                  -- to push things to the bottom
                 , em [] [ text <| toString <| numLeft, text " left to categorize..." ]
+                , viewExpense expense
                 ]
 
 
@@ -132,7 +117,7 @@ view model =
             collectExpenses budget.old
 
         catButton =
-            viewCatButton collectedCats nextExpense
+            viewCatButton collectedCats
 
         catButtons =
             List.map catButton cats

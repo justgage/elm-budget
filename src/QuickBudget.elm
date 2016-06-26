@@ -9,16 +9,16 @@ model =
         [ { name = "Medical"
           , budgeted = 100.0
           }
-        , { name = "Darvil"
-          , budgeted = 100.0
-          }
         , { name = "Gas"
           , budgeted = 100.0
           }
-        , { name = "Jessicas's Allowance"
+        , { name = "Jessicas"
           , budgeted = 100.0
           }
-        , { name = "Gage's Allowance"
+        , { name = "Gage"
+          , budgeted = 25.0
+          }
+        , { name = "Darvil"
           , budgeted = 100.0
           }
         , { name = "Home"
@@ -26,9 +26,6 @@ model =
           }
         , { name = "Groceries"
           , budgeted = 500.0
-          }
-        , { name = "Gages Allowance"
-          , budgeted = 25.0
           }
         ]
     , budget =
