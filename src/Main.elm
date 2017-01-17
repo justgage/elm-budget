@@ -3,10 +3,9 @@ module Main exposing (..)
 import QuickBudget exposing (model)
 import Actions exposing (update)
 import View exposing (view)
-import Html.App exposing (beginnerProgram)
+import Html exposing (beginnerProgram)
 
 
-main : Program Never
 main =
     beginnerProgram
         { model = model
