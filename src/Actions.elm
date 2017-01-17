@@ -24,6 +24,14 @@ defer model =
     categorize "flaged" model
 
 
+
+{- This will take a transaction categorize it
+   It does this by changing the "cat" field
+   of the transaction and then moving it into
+   the "old" list
+-}
+
+
 categorize : String -> Model -> Model
 categorize cat model =
     let
@@ -62,7 +70,7 @@ noOp =
 
 
 
--- undo last categorize (category is still there)
+{--undo last categorization (category is still there)-}
 
 
 undo : Model -> Model

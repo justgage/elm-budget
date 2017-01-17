@@ -8268,9 +8268,9 @@ var _user$project$Types$Expense = F3(
 	function (a, b, c) {
 		return {name: a, amount: b, cat: c};
 	});
-var _user$project$Types$Model = F2(
-	function (a, b) {
-		return {budget: a, cats: b};
+var _user$project$Types$Model = F3(
+	function (a, b, c) {
+		return {budget: a, cats: b, route: c};
 	});
 var _user$project$Types$Defer = {ctor: 'Defer'};
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
@@ -8429,7 +8429,8 @@ var _user$project$QuickBudget$model = {
 				}
 			}
 		}
-	}
+	},
+	route: 'home'
 };
 
 var _user$project$Style$styles = function (lst) {

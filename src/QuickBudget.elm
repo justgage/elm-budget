@@ -65,4 +65,5 @@ model =
               }
             ]
         }
+    , route = "home"
     }

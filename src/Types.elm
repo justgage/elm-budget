@@ -27,6 +27,7 @@ type alias Expense =
 type alias Model =
     { budget : Budget
     , cats : Categories
+    , route : String
     }
 
 
