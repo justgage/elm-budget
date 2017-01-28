@@ -18,6 +18,9 @@ update action model =
         Defer ->
             defer model
 
+        RouteChange newRoute ->
+            { model | route = newRoute }
+
 
 defer : Model -> Model
 defer model =

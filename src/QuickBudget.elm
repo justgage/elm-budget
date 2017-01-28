@@ -65,5 +65,5 @@ model =
               }
             ]
         }
-    , route = "home"
+    , route = HomePage
     }

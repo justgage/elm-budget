@@ -11,22 +11,22 @@ type alias FullCategory =
 
 
 dictReduce : Expense -> Dict String FullCategory -> Dict String FullCategory
-dictReduce expence fcats =
+dictReduce expence fullCategorys =
     let
-        fcat =
-            Dict.get expence.cat fcats
+        fullCategory =
+            Dict.get expence.cat fullCategorys
                 |> Maybe.withDefault (FullCategory 0 [])
 
         amount =
-            fcat.amount + expence.amount
+            fullCategory.amount + expence.amount
 
         expences =
-            expence :: fcat.expences
+            expence :: fullCategory.expences
 
         updatedCat =
             { amount = amount, expences = expences }
     in
-        Dict.insert expence.cat updatedCat fcats
+        Dict.insert expence.cat updatedCat fullCategorys
 
 
 {-|

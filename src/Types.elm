@@ -24,10 +24,16 @@ type alias Expense =
     }
 
 
+type Route
+    = HomePage
+    | CategorizationPage
+    | NotFoundPage String
+
+
 type alias Model =
     { budget : Budget
     , cats : Categories
-    , route : String
+    , route : Route
     }
 
 
@@ -36,3 +42,4 @@ type Action
     | Undo
     | NoOp
     | Defer
+    | RouteChange Route
