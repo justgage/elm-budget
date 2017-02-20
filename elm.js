@@ -8576,18 +8576,6 @@ var _user$project$Style$logo = {
 	}
 };
 
-var _user$project$View_Pages_Categorization$logo = A2(
-	_elm_lang$html$Html$img,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$src('/flowbudget.png'),
-		_1: {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(_user$project$Style$logo),
-			_1: {ctor: '[]'}
-		}
-	},
-	{ctor: '[]'});
 var _user$project$View_Pages_Categorization$viewUndoButton = A2(
 	_elm_lang$html$Html$button,
 	{
@@ -8913,42 +8901,38 @@ var _user$project$View_Pages_Categorization$view = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: _user$project$View_Pages_Categorization$logo,
+			_0: A2(
+				_user$project$View_Pages_Categorization$scrollList,
+				nextExpense,
+				_elm_lang$core$List$length(budget.$new)),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_user$project$View_Pages_Categorization$scrollList,
-					nextExpense,
-					_elm_lang$core$List$length(budget.$new)),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(_user$project$Style$buttonHolder),
+						_1: {ctor: '[]'}
+					},
+					_elm_lang$core$List$concat(
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(_user$project$Style$buttonHolder),
-							_1: {ctor: '[]'}
-						},
-						_elm_lang$core$List$concat(
-							{
+							_0: {
 								ctor: '::',
-								_0: {
-									ctor: '::',
-									_0: _user$project$View_Pages_Categorization$viewUndoButton,
-									_1: {
-										ctor: '::',
-										_0: _user$project$View_Pages_Categorization$viewDeferButton,
-										_1: {ctor: '[]'}
-									}
-								},
+								_0: _user$project$View_Pages_Categorization$viewUndoButton,
 								_1: {
 									ctor: '::',
-									_0: catButtons,
+									_0: _user$project$View_Pages_Categorization$viewDeferButton,
 									_1: {ctor: '[]'}
 								}
-							})),
-					_1: {ctor: '[]'}
-				}
+							},
+							_1: {
+								ctor: '::',
+								_0: catButtons,
+								_1: {ctor: '[]'}
+							}
+						})),
+				_1: {ctor: '[]'}
 			}
 		});
 };
