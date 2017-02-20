@@ -1,4 +1,4 @@
-module Pages.Home exposing (view)
+module View.Pages.Home exposing (view)
 
 import Types exposing (..)
 import Html exposing (div, button, text)
@@ -7,6 +7,4 @@ import Html.Events exposing (onClick)
 
 
 view model =
-    div []
-        [ button [ onClick (RouteChange CategorizationPage) ] [ text "Categorize" ]
-        ]
+    text "Welcome to FlowBudget"

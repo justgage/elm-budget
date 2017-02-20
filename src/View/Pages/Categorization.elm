@@ -1,4 +1,4 @@
-module Pages.Categorization exposing (view)
+module View.Pages.Categorization exposing (view)
 
 import Html exposing (body, h3, div, button, text, Html, img, em, span, strong)
 import Html.Events exposing (onClick, onMouseEnter)
@@ -103,11 +103,6 @@ scrollList maybeExpense numLeft =
                 , em [] [ text <| toString <| numLeft, text " left to categorize..." ]
                 , viewExpense expense
                 ]
-
-
-logo : Html Action
-logo =
-    img [ src "/flowbudget.png", style Style.logo ] []
 
 
 view : Model -> Html Action

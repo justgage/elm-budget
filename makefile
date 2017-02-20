@@ -1,3 +1,2 @@
 main:
-	elm-make src/Main.elm --output index.js
-
+	elm-make src/Main.elm --output elm.js
