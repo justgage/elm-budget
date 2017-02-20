@@ -124,8 +124,7 @@ view model =
             List.map catButton cats
     in
         div [ style Style.body ]
-            [ logo
-            , scrollList nextExpense (List.length budget.new)
+            [ scrollList nextExpense (List.length budget.new)
             , div [ style Style.buttonHolder ]
                 (List.concat [ [ viewUndoButton, viewDeferButton ], catButtons ])
             ]
